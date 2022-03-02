@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Flora</string>
+    <string name="name">Nombre</string>
+    <string name="bt_add">Añadir</string>
+    <string name="family">Familia</string>
+    <string name="hint_habitat">Habitat</string>
+</resources>
