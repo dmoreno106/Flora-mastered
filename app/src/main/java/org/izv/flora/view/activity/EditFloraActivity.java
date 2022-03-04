@@ -94,7 +94,7 @@ public class EditFloraActivity extends AppCompatActivity {
                     .setMessage(R.string.borrarFlora)
                     .setPositiveButton(R.string.accept, (dialog, which) -> {
                         efvm.deleteFlora(flora.getId());
-                        Toast.makeText(context, R.string.floraAdd, Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, R.string.floraBorrada, Toast.LENGTH_LONG).show();
                         finish();
                     })
                     .setNegativeButton(R.string.cancel, (dialog, which) -> {

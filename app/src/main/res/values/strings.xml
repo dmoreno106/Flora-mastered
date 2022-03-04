@@ -44,4 +44,5 @@
     <string name="borrarFlora">Los datos serán irrecuperables</string>
     <string name="borrado">¿Desea borrar la flora?</string>
     <string name="floraAdd">Flora Añadida</string>
+    <string name="floraBorrada">floraBorrada</string>
 </resources>
