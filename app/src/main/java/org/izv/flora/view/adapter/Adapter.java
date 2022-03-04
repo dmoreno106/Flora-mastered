@@ -35,7 +35,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> implements View.On
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-         String ivURL = "https://informatica.ieszaidinvergeles.org:10008/ad/felixRLDFApp/public/api/imagen/";
+         String ivURL = "https://informatica.ieszaidinvergeles.org:10012/ad/felixRDLFApp/public/api/imagen/";
 
         Flora flora = floraList.get(position);
         holder.etNombre.setText(flora.getNombre());

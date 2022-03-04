@@ -43,6 +43,7 @@ public class AddFloraActivity extends AppCompatActivity {
         avm= new ViewModelProvider(this).get(AddFloraViewModel.class);
         avm.getAddFloraLiveData().observe(this, aLong -> {
             if(aLong>0){
+                Toast.makeText(context, R.string.add, Toast.LENGTH_LONG).show();
                 finish();
             }else {
                 Toast.makeText(AddFloraActivity.this,R.string.Error,Toast.LENGTH_LONG).show();
@@ -110,8 +111,7 @@ public class AddFloraActivity extends AppCompatActivity {
                     }
                     if (!repitedFlora) {
                         avm.createFlora(getFlora());
-                        Toast.makeText(context, R.string.add, Toast.LENGTH_LONG).show();
-                        finish();
+
                     }else{
                         Toast.makeText(context, R.string.exist, Toast.LENGTH_SHORT).show();
                     }

@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import org.izv.flora.R;
 import org.izv.flora.model.entity.Flora;
 import org.izv.flora.viewmodel.EditFloraViewModel;
@@ -24,7 +26,7 @@ public class EditFloraActivity extends AppCompatActivity {
     private Flora flora;
     private ArrayList<Flora> arrayFlora = new ArrayList<>();
     private EditFloraViewModel efvm;
-    private String ivFloraURL = "https://informatica.ieszaidinvergeles.org:10008/ad/felixRLDFApp/public/api/imagen/";
+    private String ivFloraURL = "https://informatica.ieszaidinvergeles.org:10012/ad/felixRDLFApp/public/api/imagen/";
     private ImageView ivFlora;
     private EditText etNombre, etFamilia, etIdentificacion,
             etAltitud, etHabitat, etFitosociologia,
@@ -78,22 +80,40 @@ public class EditFloraActivity extends AppCompatActivity {
         etAmenazas = findViewById(R.id.etAmenazas);
         etMedPropuestas = findViewById(R.id.etMedPropuestas);
 
+        setFlora();
         buttons();
-
+        noEdit();
     }
 
     private void buttons() {
 
         btBorrar = findViewById(R.id.btBorrar);
-
+        btBorrar.setOnClickListener(view -> {
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.borrado)
+                    .setMessage(R.string.borrarFlora)
+                    .setPositiveButton(R.string.accept, (dialog, which) -> {
+                        efvm.deleteFlora(flora.getId());
+                        Toast.makeText(context, R.string.floraAdd, Toast.LENGTH_LONG).show();
+                        finish();
+                    })
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                        dialog.cancel();
+                    })
+                    .show();
+        });
 
 
         btEditar = findViewById(R.id.btEdit);
-
+        btEditar.setOnClickListener(view -> {
+                        edit();
+        });
 
 
         btCancelEdit = findViewById(R.id.btCancelEdit);
-
+        btCancelEdit.setOnClickListener(view -> {
+        finish();
+        });
 
 
 
@@ -103,7 +123,7 @@ public class EditFloraActivity extends AppCompatActivity {
                     .setTitle(R.string.cambiar)
                     .setMessage(R.string.deseaCambiar)
                     .setPositiveButton(R.string.accept, (dialog, which) -> {
-                        if (etNombre.getText().toString().isEmpty()) {
+                        if (!etNombre.getText().toString().isEmpty()) {
                             efvm.editFlora(flora.getId(), getFlora());
                             finish();
                         } else {
@@ -147,6 +167,7 @@ public class EditFloraActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         flora = bundle.getParcelable("selectedFlora");
 
+
         etNombre.setText(flora.getNombre());
         etFamilia.setText(flora.getFamilia());
         etIdentificacion.setText(flora.getIdentificacion());
@@ -167,5 +188,68 @@ public class EditFloraActivity extends AppCompatActivity {
         etDemografia.setText(flora.getDemografia());
         etAmenazas.setText(flora.getAmenazas());
         etMedPropuestas.setText(flora.getMedidas_propuestas());
+    }
+
+
+    private void edit() {
+
+
+        btEditar.setVisibility(View.GONE);
+        ivFlora.setVisibility(View.GONE);
+        btGuardar.setVisibility(View.VISIBLE);
+
+        etNombre.setEnabled(true);
+        etFamilia.setEnabled(true);
+        etIdentificacion.setEnabled(true);
+        etAltitud.setEnabled(true);
+        etHabitat.setEnabled(true);
+        etFitosociologia.setEnabled(true);
+        etBiotipo.setEnabled(true);
+        etBioReproductiva.setEnabled(true);
+        etFloracion.setEnabled(true);
+        etFructificacion.setEnabled(true);
+        etExpSexual.setEnabled(true);
+        etPolinizacion.setEnabled(true);
+        etDispersion.setEnabled(true);
+        etNumCromosomatico.setEnabled(true);
+        etRepAsexual.setEnabled(true);
+        etDistribucion.setEnabled(true);
+        etBiologia.setEnabled(true);
+        etDemografia.setEnabled(true);
+        etAmenazas.setEnabled(true);
+        etMedPropuestas.setEnabled(true);
+    }
+
+
+    private void noEdit() {
+
+
+        btEditar.setVisibility(View.VISIBLE);
+
+        ivFlora.setVisibility(View.VISIBLE);
+        btGuardar.setVisibility(View.GONE);
+
+        Picasso.get().load(ivFloraURL + flora.getId() + "/flora").into(ivFlora);
+
+        etNombre.setEnabled(false);
+        etFamilia.setEnabled(false);
+        etIdentificacion.setEnabled(false);
+        etAltitud.setEnabled(false);
+        etHabitat.setEnabled(false);
+        etFitosociologia.setEnabled(false);
+        etBiotipo.setEnabled(false);
+        etBioReproductiva.setEnabled(false);
+        etFloracion.setEnabled(false);
+        etFructificacion.setEnabled(false);
+        etExpSexual.setEnabled(false);
+        etPolinizacion.setEnabled(false);
+        etDispersion.setEnabled(false);
+        etNumCromosomatico.setEnabled(false);
+        etRepAsexual.setEnabled(false);
+        etDistribucion.setEnabled(false);
+        etBiologia.setEnabled(false);
+        etDemografia.setEnabled(false);
+        etAmenazas.setEnabled(false);
+        etMedPropuestas.setEnabled(false);
     }
 }

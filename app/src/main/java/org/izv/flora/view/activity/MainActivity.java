@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private Adapter adapter;
     private  MutableLiveData<ArrayList<Flora>> floraList;
     private Context context;
-
+    private MainActivityViewModel mavm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-        MainActivityViewModel mavm = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        mavm = new ViewModelProvider(this).get(MainActivityViewModel.class);
          floraList= mavm.getFloraLiveData();
 
         buttons();
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnClickListener(view -> {
 
             Intent intent = new Intent(this, EditFloraActivity.class);
-            intent.putExtra("idFlora", adapter.getItem(rv.getChildAdapterPosition(view)));
+            intent.putExtra("selectedFlora", adapter.getItem(rv.getChildAdapterPosition(view)));
 
             ArrayList<Flora> floras = new ArrayList<>();
             for (int i = 0; i < adapter.getItemCount(); i++) {
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void buttons() {
         floraList.observe(this, floraPlural -> {
-            Log.v("xyzyx", floraPlural.toString());
+           // Log.v("xyzyx", floraPlural.toString());
 
 
             fabAdd=findViewById(R.id.fabAdd);
@@ -103,10 +103,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openAddImagenActivity(){
+
+        ArrayList<Flora> floras = new ArrayList<>();
+        for (int i = 0; i < adapter.getItemCount(); i++) {
+            floras.add(adapter.getItem(i));
+        }
+
+
+
         Intent intent=new Intent(this, AddImagenActivity.class);
+        intent.putExtra("arrayFlora", floras);
         startActivity(intent);
     }
 
+    protected void onResume() {
+        super.onResume();
+        mavm.getFlora();
+        initialize();
+    }
 
 
 

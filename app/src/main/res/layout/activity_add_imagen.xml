@@ -31,27 +31,6 @@
         app:layout_constraintTop_toTopOf="@+id/btCancelImage" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout20"
-        android:layout_width="379dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
-
-        <AutoCompleteTextView
-            android:id="@+id/idSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/spinnerFlora"
-            android:inputType="none"
-            tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout21"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -60,9 +39,10 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout20">
+        app:layout_constraintTop_toBottomOf="@+id/spinnerFloraId">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etNombreAddImg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/name" />
@@ -87,7 +67,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/ivAddPicture"
         android:layout_width="387dp"
         android:layout_height="211dp"
         android:layout_marginStart="16dp"
@@ -96,5 +76,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/flora_photo" />
+        app:srcCompat="@drawable/flora_photo" />
+
+    <Spinner
+        android:id="@+id/spinnerFloraId"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivAddPicture"
+        tools:ignore="SpeakableTextPresentCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

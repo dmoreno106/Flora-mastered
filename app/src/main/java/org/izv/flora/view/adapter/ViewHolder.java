@@ -13,9 +13,6 @@ import org.izv.flora.R;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
 
-    /**
-     * Campos de la clase
-     */
     public ImageView ivFlora;
     public EditText etNombre, etFamilia,etHabitat,etDemografia,etAmenazas;
     public Button btExpand;

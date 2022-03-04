@@ -49,13 +49,15 @@ public class Repository {
         floraClient = getFloraClient();
     }
 
+
     public Repository(Context context) {
         this.context = context;
     }
 
+
     private static FloraClient getFloraClient() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://informatica.ieszaidinvergeles.org:10008/ad/felixRLDFApp/public/")
+                .baseUrl("https://informatica.ieszaidinvergeles.org:10012/ad/felixRDLFApp/public/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(FloraClient.class);
@@ -65,13 +67,10 @@ public class Repository {
         return floraLiveData;
     }
 
-    public MutableLiveData<Long> getAddFloraLiveData(){ return addFloraLiveData;}
-    public MutableLiveData<Long> getAddImagenLiveData() { return addImagenLiveData; }
 
-
-
-
-
+    public MutableLiveData<Long> getAddFloraLiveData() {
+        return addFloraLiveData;
+    }
 
     public void deleteFlora(long id) {
         Call<RowsResponse> call = floraClient.deleteFlora(id);
@@ -88,9 +87,6 @@ public class Repository {
         });
     }
 
-    public void getFlora(long id) {
-
-    }
 
     public void getFlora() {
         Call<ArrayList<Flora>> call = floraClient.getFlora();
@@ -98,22 +94,19 @@ public class Repository {
             @Override
             public void onResponse(Call<ArrayList<Flora>> call, Response<ArrayList<Flora>> response) {
                 floraLiveData.setValue(response.body());
+                Log.v("xyzyx", response.body().toString());
             }
+
             @Override
             public void onFailure(Call<ArrayList<Flora>> call, Throwable t) {
-
+                Log.v("xyzyx", t.getLocalizedMessage());
             }
         });
     }
 
 
-
-    public void setAddImagenLiveData(MutableLiveData<Long> addImagenLiveData) {
-        this.addImagenLiveData = addImagenLiveData;
-    }
-
     public void createFlora(Flora flora) {
-        Call<CreateResponse>call=floraClient.createFlora(flora);
+        Call<CreateResponse> call = floraClient.createFlora(flora);
         call.enqueue(new Callback<CreateResponse>() {
             @Override
             public void onResponse(Call<CreateResponse> call, Response<CreateResponse> response) {
@@ -122,10 +115,11 @@ public class Repository {
 
             @Override
             public void onFailure(Call<CreateResponse> call, Throwable t) {
-                Log.v("xyzxy",t.toString());
+
             }
         });
     }
+
 
     public void editFlora(long id, Flora flora) {
         Call<RowsResponse> call = floraClient.editFlora(id, flora);
@@ -134,9 +128,7 @@ public class Repository {
             public void onResponse(Call<RowsResponse> call, Response<RowsResponse> response) {
                 try {
                     editFloraLiveData.setValue(response.body().rows);
-                    Toast.makeText(context, R.string.editSuccesful, Toast.LENGTH_LONG).show();
                 } catch (NullPointerException e) {
-                    Toast.makeText(context, R.string.editFail, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -147,21 +139,22 @@ public class Repository {
         });
     }
 
-    public void saveImagen(Intent intent,Imagen imagen){
-        String nombre="xyzyx.abc";
-        copyData(intent,nombre);
-        File file=new File(context.getExternalFilesDir(null),nombre);
-        subirImagen(file,imagen);
-    }
-    private void subirImagen(File file, Imagen imagen){
-        RequestBody requestFile=RequestBody.create(MediaType.parse("image/*"),file);
-        MultipartBody.Part body=MultipartBody.Part.createFormData("photo",imagen.nombre,requestFile);
-        Call<Long> call =floraClient.subirImagen(body,imagen.idflora,imagen.descripcion);
 
+    public void saveImagen(Intent intent, Imagen imagen) {
+        String nombre = "xyzyx.abc";
+        copyData(intent, nombre);
+        File file = new File(context.getExternalFilesDir(null), nombre);
+        subirImagen(file, imagen);
+    }
+
+    private void subirImagen(File file, Imagen imagen) {
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("photo", imagen.nombre, requestFile);
+        Call<Long> call = floraClient.subirImagen(body, imagen.idflora, imagen.descripcion);
         call.enqueue(new Callback<Long>() {
             @Override
             public void onResponse(Call<Long> call, Response<Long> response) {
-            addImagenLiveData.setValue(response.body());
+                addImagenLiveData.setValue(response.body());
             }
 
             @Override
@@ -170,24 +163,26 @@ public class Repository {
             }
         });
     }
-    private void copyData(Intent data,String name){
-        Uri uri=data.getData();
-        InputStream in= null;
-        OutputStream out=null;
+
+    private boolean copyData(Intent data, String name) {
+        boolean result = true;
+        Uri uri = data.getData();
+        InputStream in = null;
+        OutputStream out = null;
         try {
-            in=context.getContentResolver().openInputStream(uri);
-            out=new FileOutputStream(new File(context.getExternalFilesDir(null),name));
-            byte[]buffer=new byte[1024];
+            in = context.getContentResolver().openInputStream(uri);
+            out = new FileOutputStream(new File(context.getExternalFilesDir(null), name));
+            byte[] buffer = new byte[1024];
             int len;
-            while ((len=in.read(buffer))!=-1);{
-             out.write(buffer,0,len);
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
             }
             in.close();
             out.close();
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
-        } ;
+            result = false;
+        }
+        return result;
     }
+
 }

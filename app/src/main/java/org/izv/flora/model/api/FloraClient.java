@@ -36,6 +36,6 @@ public interface FloraClient {
 
     @Multipart
     @POST("api/imagen/subir")
-    Call<Long> subirImagen(@Part MultipartBody.Part file, @Part("id") long idFlora, @Part("descpription") String description);
+    Call<Long> subirImagen(@Part MultipartBody.Part file, @Part("idflora") long idFlora, @Part("descripcion") String descripcion);
 
 }
