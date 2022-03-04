@@ -1,6 +1,9 @@
 package org.izv.flora.model.entity;
 
-public class Flora {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Flora implements Parcelable {
 
     private long id;
     private String nombre, familia, identificacion, altitud, habitat,
@@ -35,6 +38,42 @@ public class Flora {
         this.amenazas = amenazas;
         this.medidas_propuestas = medidas_propuestas;
     }
+
+    protected Flora(Parcel in) {
+        id = in.readLong();
+        nombre = in.readString();
+        familia = in.readString();
+        identificacion = in.readString();
+        altitud = in.readString();
+        habitat = in.readString();
+        fitosociologia = in.readString();
+        biotipo = in.readString();
+        biologia_reproductiva = in.readString();
+        floracion = in.readString();
+        fructificacion = in.readString();
+        expresion_sexual = in.readString();
+        polinizacion = in.readString();
+        dispersion = in.readString();
+        numero_cromosomatico = in.readString();
+        reproduccion_asexual = in.readString();
+        distribucion = in.readString();
+        biologia = in.readString();
+        demografia = in.readString();
+        amenazas = in.readString();
+        medidas_propuestas = in.readString();
+    }
+
+    public static final Creator<Flora> CREATOR = new Creator<Flora>() {
+        @Override
+        public Flora createFromParcel(Parcel in) {
+            return new Flora(in);
+        }
+
+        @Override
+        public Flora[] newArray(int size) {
+            return new Flora[size];
+        }
+    };
 
     public long getId() {
         return id;
@@ -229,5 +268,35 @@ public class Flora {
                 ", amenazas='" + amenazas + '\'' +
                 ", medidas_propuestas='" + medidas_propuestas + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeString(nombre);
+        parcel.writeString(familia);
+        parcel.writeString(identificacion);
+        parcel.writeString(altitud);
+        parcel.writeString(habitat);
+        parcel.writeString(fitosociologia);
+        parcel.writeString(biotipo);
+        parcel.writeString(biologia_reproductiva);
+        parcel.writeString(floracion);
+        parcel.writeString(fructificacion);
+        parcel.writeString(expresion_sexual);
+        parcel.writeString(polinizacion);
+        parcel.writeString(dispersion);
+        parcel.writeString(numero_cromosomatico);
+        parcel.writeString(reproduccion_asexual);
+        parcel.writeString(distribucion);
+        parcel.writeString(biologia);
+        parcel.writeString(demografia);
+        parcel.writeString(amenazas);
+        parcel.writeString(medidas_propuestas);
     }
 }

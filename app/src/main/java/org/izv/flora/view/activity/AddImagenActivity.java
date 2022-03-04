@@ -1,53 +1,55 @@
-package org.izv.flora.view;
+package org.izv.flora.view.activity;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.izv.flora.R;
 import org.izv.flora.model.entity.Flora;
 import org.izv.flora.model.entity.Imagen;
-import org.izv.flora.viewmodel.AddFloraViewModel;
 import org.izv.flora.viewmodel.AddImagenViewModel;
+
+import java.util.ArrayList;
 
 public class AddImagenActivity extends AppCompatActivity {
 
     private Button btSelectImage;
     private ActivityResultLauncher<Intent> launcher;
     private Intent resultadoImagen;
+    private AutoCompleteTextView spinnerIdFlora;
     private Button btAddImagen;
-    private EditText etIdFlora,etNombre,etDescripcion;
+    private EditText etNombre,etDescripcion;
     private AddImagenViewModel aivm;
+    private ArrayList<Flora> arrayFlora;
+    private long id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_imagen);
+        arrayFlora= (ArrayList<Flora>) getIntent().getSerializableExtra("arrayFlora");
         initialize();
     }
 
         private void initialize() {
            launcher= getLauncher();
          aivm = new ViewModelProvider(this).get(AddImagenViewModel.class);
-
-            etIdFlora=findViewById(R.id.etIdFlora);
+            spinnerIdFlora =findViewById(R.id.idSpinner);
             etNombre=findViewById(R.id.etNombre);
             etDescripcion=findViewById(R.id.etDescripcion);
 
-            btSelectImage=findViewById(R.id.btSelectImage);
+
+            fillSpinner();
+
+            btSelectImage=findViewById(R.id.btCancelImage);
             btSelectImage.setOnClickListener(view -> {
                 selectImage();
             });
@@ -60,16 +62,24 @@ public class AddImagenActivity extends AppCompatActivity {
         }
 
     private void uploadDataImage() {
+        for (Flora flora:arrayFlora) {
+            if(spinnerIdFlora.getText().equals(flora.getNombre())){
+              id=flora.getId();
+            }
+        }
+
     String nombre=etNombre.getText().toString();
     String descripcion=etDescripcion.getText().toString();
-    String idFlora=etIdFlora.getText().toString();
-    if(nombre.trim().isEmpty()|| idFlora.trim().isEmpty()|| resultadoImagen==null){
+    String idFlora= spinnerIdFlora.getText().toString();
+    if(nombre.trim().isEmpty()|| idFlora.trim().isEmpty()|| resultadoImagen==null ||id==0){
+
+    }else{
         Imagen imagen=new Imagen();
         imagen.nombre=nombre;
         imagen.descripcion=descripcion;
         imagen.idflora=Long.parseLong(idFlora);
         aivm.saveImagen(resultadoImagen,imagen);
-
+        finish();
     }
     }
 
@@ -98,5 +108,15 @@ public class AddImagenActivity extends AppCompatActivity {
             Intent intent = getContentIntent();
             launcher.launch(intent);
             getLauncher().launch(getContentIntent());
+        }
+
+        void fillSpinner(){
+
+            String[] selected = new String[arrayFlora.size()];
+            for (int i = 0; i < arrayFlora.size(); i++) {
+                selected[i] = arrayFlora.get(i).getNombre();
+            }
+         ArrayAdapter<String> content = new ArrayAdapter<>(this, R.layout.list_flora, R.id.idFlora, selected);
+            spinnerIdFlora.setAdapter(content);
         }
 }

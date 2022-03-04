@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
+import org.izv.flora.R;
 import org.izv.flora.model.api.FloraClient;
 import org.izv.flora.model.entity.CreateResponse;
 import org.izv.flora.model.entity.Flora;
@@ -39,6 +41,9 @@ public class Repository {
     private MutableLiveData<ArrayList<Flora>> floraLiveData = new MutableLiveData<>();
     private MutableLiveData<Long> addFloraLiveData=new MutableLiveData<Long>();
     private MutableLiveData<Long> addImagenLiveData=new MutableLiveData<>();
+    private MutableLiveData<Long> deleteFloraLiveData = new MutableLiveData<>();
+    private MutableLiveData<Long> deleteImagenLiveData = new MutableLiveData<>();
+    private MutableLiveData<Long> editFloraLiveData = new MutableLiveData<>();
 
     static {
         floraClient = getFloraClient();
@@ -50,7 +55,7 @@ public class Repository {
 
     private static FloraClient getFloraClient() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://informatica.ieszaidinvergeles.org:10012/ad/floraV2/public/")
+                .baseUrl("https://informatica.ieszaidinvergeles.org:10008/ad/felixRLDFApp/public/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(FloraClient.class);
@@ -62,8 +67,25 @@ public class Repository {
 
     public MutableLiveData<Long> getAddFloraLiveData(){ return addFloraLiveData;}
     public MutableLiveData<Long> getAddImagenLiveData() { return addImagenLiveData; }
-    public void deleteFlora(long id) {
 
+
+
+
+
+
+    public void deleteFlora(long id) {
+        Call<RowsResponse> call = floraClient.deleteFlora(id);
+        call.enqueue(new Callback<RowsResponse>() {
+            @Override
+            public void onResponse(Call<RowsResponse> call, Response<RowsResponse> response) {
+                deleteFloraLiveData.setValue(response.body().rows);
+            }
+
+            @Override
+            public void onFailure(Call<RowsResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     public void getFlora(long id) {
@@ -106,7 +128,23 @@ public class Repository {
     }
 
     public void editFlora(long id, Flora flora) {
+        Call<RowsResponse> call = floraClient.editFlora(id, flora);
+        call.enqueue(new Callback<RowsResponse>() {
+            @Override
+            public void onResponse(Call<RowsResponse> call, Response<RowsResponse> response) {
+                try {
+                    editFloraLiveData.setValue(response.body().rows);
+                    Toast.makeText(context, R.string.editSuccesful, Toast.LENGTH_LONG).show();
+                } catch (NullPointerException e) {
+                    Toast.makeText(context, R.string.editFail, Toast.LENGTH_LONG).show();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<RowsResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     public void saveImagen(Intent intent,Imagen imagen){
